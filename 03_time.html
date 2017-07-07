@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>time服务</title>
+	<script src="../angularjs/angular.min.js"></script>
+</head>
+<body ng-app="app">
+	<div ng-controller="myCtrl">
+		{{msg}}
+	</div>
+	<div ng-controller="interval">
+		当前时间：{{msg}} <br>
+		<input type="button" value="停止" ng-click="stop()">
+	</div>
+</body>
+<script>
+	var app = angular.module("app",[]);
+	app.controller("myCtrl",["$scope","$timeout",function($scope,$timeout){
+		$timeout(function(){
+			$scope.msg = "3秒到了";
+		},3000);
+	}]);
+	app.controller("interval",["$scope","$interval","$filter",function($scope,$interval,$filter){
+		var d = $filter("date")
+		var id = $interval(function(){
+			$scope.msg = d(new Date(),"yyyy-MM-dd HH:mm:ss");
+		},1000);
+		$scope.stop = function(){
+			// clearInterval(id);  // 原生JS 中停止interval的方法
+			$interval.cancel(id);
+		}
+	}]);
+</script>
+</html>
